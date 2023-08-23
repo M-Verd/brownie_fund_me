@@ -8,16 +8,16 @@ contract FundMe {
     using SafeMathChainlink for uint256;
 
     mapping(address => uint256) public addressToAmountFunded;
-    address[] public funders;
+    address[] private funders;
     address private owner;
-    AggregatorV3Interface public dataFeed;
+    AggregatorV3Interface private dataFeed;
 
     constructor(address _priceFeed) {
         dataFeed = AggregatorV3Interface(_priceFeed);
         owner = msg.sender;
     }
 
-    //Function that returns owner of this contract
+    // Function that returns owner of this contract
     function getOwner() public view returns (address) {
         return (owner);
     }

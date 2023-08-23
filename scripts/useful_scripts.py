@@ -1,6 +1,9 @@
 from brownie import accounts, network, MockV3Aggregator
 from web3 import Web3
 
+# Those are useful scripts to deploy a mock, in case we are working in a local environment, and to get a proper account for the network.
+# Since it's everything on brownie, the account used for non-local networks is retrieved from already saved account in the brownie venv.
+
 FORKED_LOCAL_ENVIRONMENTS = ["mainnet-fork", "mainnet-fork-dev"]
 LOCAL_DEV_ENVIRONMENTS = ["development", "ganache-local"]
 
@@ -10,7 +13,9 @@ STARTING_PRICE = 200000000000
 
 def getAccount():
     active_network = network.show_active()
-    print(f"The active network is {active_network}, Getting an account for this one...")
+    print(
+        f"\nThe active network is {active_network}, Getting an account for this one..."
+    )
     if (
         active_network in LOCAL_DEV_ENVIRONMENTS
         or active_network in FORKED_LOCAL_ENVIRONMENTS

@@ -3,34 +3,35 @@ from scripts.deploy import deployFundMe
 from scripts.useful_scripts import getAccount, LOCAL_DEV_ENVIRONMENTS
 import pytest
 
+# This testing script will test fund, withdraw and withdraw_only_owner functions
+
 
 def test_fund():
     # ARRANGE
     account = getAccount()
-    working_address = deployFundMe(account)
+    testing_address = deployFundMe(account)
 
     # ACT
-    tx = working_address.fund({"from": account, "value": 1 * (10**18)})
+    tx = testing_address.fund({"from": account, "value": 1 * (10**18)})
     tx.wait(1)
 
     # ASSERT
-    assert working_address.getOwner() == account
-    assert working_address.addressToAmountFunded(account) != 0
+    assert testing_address.addressToAmountFunded(account) != 0
 
 
 def test_withdraw():
     # ARRANGE
     account = getAccount()
-    working_address = deployFundMe(account)
-    working_address.fund({"from": account, "value": 1 * (10**18)})
+    testing_address = deployFundMe(account)
+    testing_address.fund({"from": account, "value": 1 * (10**18)})
 
     # ACT
-    tx = working_address.withdraw({"from": account})
+    tx = testing_address.withdraw({"from": account})
     tx.wait(1)
 
     # ASSERT
-    assert working_address.addressToAmountFunded(account) == 0
-    assert working_address.balance() == 0
+    assert testing_address.addressToAmountFunded(account) == 0
+    assert testing_address.balance() == 0
 
 
 def test_withdraw_only_owner():
@@ -40,16 +41,17 @@ def test_withdraw_only_owner():
         # ARRANGE
         account = getAccount()
         bad_actor = accounts.add()
-        working_address = deployFundMe(account)
-        working_address.fund({"from": account, "value": 1 * (10**18)})
+        testing_address = deployFundMe(account)
+        testing_address.fund({"from": account, "value": 1 * (10**18)})
 
         # ACT
         with pytest.raises(exceptions.VirtualMachineError):
-            working_address.ownerWithdrawAll({"from": bad_actor})
+            testing_address.ownerWithdrawAll({"from": bad_actor})
 
-        tx = working_address.ownerWithdrawAll({"from": account})
+        tx = testing_address.ownerWithdrawAll({"from": account})
         tx.wait(1)
 
         # ASSERT
-        assert working_address.addressToAmountFunded(account) == 0
-        assert working_address.balance() == 0
+        assert testing_address.getOwner() == account
+        assert testing_address.addressToAmountFunded(account) == 0
+        assert testing_address.balance() == 0
