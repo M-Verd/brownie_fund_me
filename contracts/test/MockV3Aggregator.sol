@@ -23,7 +23,7 @@ contract MockV3Aggregator is AggregatorV2V3Interface {
     mapping(uint256 => uint256) public override getTimestamp;
     mapping(uint256 => uint256) private getStartedAt;
 
-    constructor(uint8 _decimals, int256 _initialAnswer) public {
+    constructor(uint8 _decimals, int256 _initialAnswer) {
         decimals = _decimals;
         updateAnswer(_initialAnswer);
     }
@@ -95,7 +95,7 @@ contract MockV3Aggregator is AggregatorV2V3Interface {
         );
     }
 
-    function description() external view override returns (string memory) {
+    function description() external pure override returns (string memory) {
         return "v0.6/tests/MockV3Aggregator.sol";
     }
 }
